@@ -18,12 +18,14 @@ y
 $PORT
 EOF
 
-clean() { sed -r 's/\x1B\[[0-9;]*[a-zA-Z]//g' | tr -d '\r[:cntrl:]'; }
+clean_text() {
+  sed -r 's/\x1B\[[0-9;]*[A-Za-z]//g' | tr -d '\r[:cntrl:]'
+}
 
-USERNAME=$(grep -oP '(?<=Username: )\S+' "$INSTALL_LOG" | clean)
-PASSWORD=$(grep -oP '(?<=Password: )\S+' "$INSTALL_LOG" | clean)
-WEBPATH=$(grep -oP '(?<=WebBasePath: )\S+' "$INSTALL_LOG" | clean)
-PORT=$(grep -oP '(?<=Port: )\d+' "$INSTALL_LOG" | clean)
+USERNAME=$(grep -oP '(?<=Username: )\S+' "$INSTALL_LOG" | clean_text)
+PASSWORD=$(grep -oP '(?<=Password: )\S+' "$INSTALL_LOG" | clean_text)
+WEBPATH=$(grep -oP '(?<=WebBasePath: )\S+' "$INSTALL_LOG" | clean_text)
+PORT=$(grep -oP '(?<=Port: )\d+' "$INSTALL_LOG" | clean_text)
 
 if [[ -z "$USERNAME" || -z "$PASSWORD" || -z "$WEBPATH" || -z "$PORT" ]]; then
   DB_PATH="/etc/x-ui/x-ui.db"
